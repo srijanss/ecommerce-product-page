@@ -1,0 +1,40 @@
+@import "./_css-reset.css";
+@import "./_mixins.css";
+
+:root {
+  --color-white: hsl(0, 0%, 100%);
+  --color-black: hsl(0, 0%, 0%);
+  --color-black-75: hsla(0, 0%, 0%, 0.75);
+  --color-light-grayish-blue: hsl(223, 64%, 98%);
+  --color-grayish-blue: hsl(220, 14%, 75%);
+  --color-dark-grayish-blue: hsl(219, 9%, 45%);
+  --color-very-dark-blue: hsl(220, 13%, 13%);
+  --color-orange: hsl(26, 100%, 55%);
+  --color-pale-orange: hsl(25, 100%, 94%);
+  --default-font-family: "Kumbh Sans", sans-serif;
+  --default-font-size: 16px;
+  --fw-regular: 400;
+  --fw-bold: 700;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--default-font-family);
+  font-variation-settings: "wght" var(--fw-regular);
+  font-size: var(--default-font-size);
+  color: var(--color-very-dark-blue);
+  background-color: var(--color--white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img {
+  max-inline-size: 100%;
+  object-fit: cover;
+}

@@ -1,0 +1,30 @@
+{
+  "name": "ecommerce-product-page",
+  "version": "1.0.0",
+  "description": "Challenge, you'll build a beautiful product page. We'll be putting your JS skills to the test with a lightbox product gallery and cart functionality!",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "cssnano": "^7.0.1",
+    "postcss": "^8.4.38",
+    "postcss-css-reset": "^1.0.2",
+    "postcss-import": "^16.1.0",
+    "postcss-mixins": "^10.0.1",
+    "postcss-nested": "^6.0.1",
+    "postcss-preset-env": "^9.5.11",
+    "vite": "^5.2.0"
+  },
+  "keywords": [
+    "ecommerce",
+    "product",
+    "page"
+  ],
+  "author": "Srijan Manandhar",
+  "license": "ISC"
+}
