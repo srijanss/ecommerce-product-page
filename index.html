@@ -1,40 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
 
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
-  
-  <title>Frontend Mentor | E-commerce product page</title>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/images/favicon-32x32.png"
+    />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/styles.css">
-  <script type="module" src="./assets/js/app.js" defer></script>
-</head>
-<body>
+    <title>Frontend Mentor | E-commerce product page</title>
 
-  Collections
-  Men
-  Women
-  About
-  Contact
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+    <script type="module" src="./assets/js/app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <button id="hamburger-icon">
+        <img
+          src="./assets/images/icon-menu.svg"
+          alt="Menu"
+          width="16"
+          height="15"
+        />
+      </button>
+      <nav>
+        <button id="close-icon">
+          <img
+            src="./assets/images/icon-close.svg"
+            alt="Close menu"
+            width="14"
+            height="15"
+          />
+        </button>
+        <ul>
+          <li>
+            <a href="#"> Collections </a>
+          </li>
+          <li>
+            <a href="#"> Men </a>
+          </li>
+          <li>
+            <a href="#"> Women </a>
+          </li>
+          <li>
+            <a href="#"> About </a>
+          </li>
+          <li>
+            <a href="#"> Contact </a>
+          </li>
+        </ul>
+      </nav>
+      <img
+        src="./assets/images/logo.svg"
+        alt="Sneakers Logo"
+        width="138"
+        height="20"
+      />
+      <button id="cart-icon">
+        <img
+          src="./assets/images/icon-cart.svg"
+          alt="Cart"
+          width="22"
+          height="20"
+        />
+      </button>
+      <figure>
+        <img src="./assets/images/image-avatar.png" alt="" />
+        <figcaption>Avatar</figcaption>
+      </figure>
+      <hr />
+    </header>
+    <main>
+      <article>
+        <h2>Cart</h2>
+        <hr />
+        <p>Your cart is empty.</p>
+        <div>
+          <figure>
+            <img src="./assets/images/image-product-1-thumbnail.jpg" alt="" />
+            <figcaption>Product added to cart</figcaption>
+          </figure>
+          <h3>Fall limited Edition Sneakers</h3>
+          <span>$125.00</span> x <span>3</span> <span>$375.00</span>
+        </div>
+        <button id="delete-icon">
+          <img src="./assets/images/icon-delete.svg" alt="Delete cart item" />
+        </button>
+        <button id="checkout">Checkout</button>
+      </article>
+      <button id="icon-previous">
+        <img src="./assets/images/icon-previous.svg" alt="Previous" />
+      </button>
+      <figure>
+        <img src="./assets/images/image-product-1.jpg" alt="" />
+        <figcaption>Product 1</figcaption>
+      </figure>
+      <figure>
+        <img src="./assets/images/image-product-2.jpg" alt="" />
+        <figcaption>Product 2</figcaption>
+      </figure>
+      <figure>
+        <img src="./assets/images/image-product-3.jpg" alt="" />
+        <figcaption>Product 3</figcaption>
+      </figure>
+      <figure>
+        <img src="./assets/images/image-product-4.jpg" alt="" />
+        <figcaption>Product 4</figcaption>
+      </figure>
+      <button id="icon-next">
+        <img src="./assets/images/icon-next.svg" alt="Next" />
+      </button>
+      <button id="product-thumbnail-1">
+        <img
+          src="./assets/images/image-product-1-thumbnail.jpg"
+          alt="Product thumbnail 1"
+        />
+      </button>
+      <button id="product-thumbnail-2">
+        <img
+          src="./assets/images/image-product-2-thumbnail.jpg"
+          alt="Product thumbnail 2"
+        />
+      </button>
+      <button id="product-thumbnail-3">
+        <img
+          src="./assets/images/image-product-3-thumbnail.jpg"
+          alt="Product thumbnail 3"
+        />
+      </button>
+      <button id="product-thumbnail-4">
+        <img
+          src="./assets/images/image-product-4-thumbnail.jpg"
+          alt="Product thumbnail 4"
+        />
+      </button>
+      <span> Sneaker Company </span>
+      <h1>Fall Limited Edition Sneakers</h1>
 
-  Sneaker Company
+      <p>
+        These low-profile sneakers are your perfect casual wear companion.
+        Featuring a durable rubber outer sole, they’ll withstand everything the
+        weather can offer.
+      </p>
 
-  Fall Limited Edition Sneakers
+      <ins> $125.00 </ins>
+      <span> 50% </span>
+      <del> $250.00 </del>
 
-  These low-profile sneakers are your perfect casual wear companion. Featuring a 
-  durable rubber outer sole, they’ll withstand everything the weather can offer.
-
-  $125.00
-  50%
-  $250.00
-
-  0
-  Add to cart
-  
-</body>
+      <form action="post" id="add-to-cart" novalidate>
+        <input
+          type="number"
+          id="quantity"
+          name="quantity"
+          min="1"
+          max="10"
+          value="0"
+          aria-label="Quantity"
+          required
+        />
+        <button type="submit">Add to cart</button>
+      </form>
+    </main>
+  </body>
 </html>
