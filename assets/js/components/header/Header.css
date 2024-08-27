@@ -1,0 +1,62 @@
+@import "../../../css/_mixins.css";
+
+:host *,
+:host *:before,
+:host *:after {
+  box-sizing: border-box;
+}
+
+:host {
+  @mixin visually-hidden;
+  @mixin css-reset;
+
+  & header {
+    padding: 0 24px;
+    padding-bottom: 25px;
+    margin-top: 19px;
+    border-bottom: 1px solid #e4e9f2;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+
+    & #logo {
+      object-fit: contain;
+    }
+
+    & nav-bar {
+      order: -1;
+    }
+
+    & #empty-space {
+      flex: 1;
+    }
+
+    & #cart-icon {
+      display: flex;
+      align-items: center;
+    }
+
+    & #avatar {
+      --avatar-size: 24px;
+      width: var(--avatar-size);
+      height: var(--avatar-size);
+      margin-left: 22px;
+    }
+
+    @mixin media-query-large-tablet {
+      --nav-height: 50px;
+      margin-top: 28px;
+      padding-bottom: 34px;
+      align-items: center;
+
+      & nav-bar {
+        height: var(--nav-height);
+        order: inherit;
+      }
+      & #avatar {
+        --avatar-size: 50px;
+        margin-left: 46.18px;
+      }
+    }
+  }
+}

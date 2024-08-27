@@ -19,14 +19,16 @@ export default class HeaderComponent extends HTMLElement {
         ${css}
       </style>
       <header>
-        <nav-bar></nav-bar>
         <img
+          id="logo"
           src="${Logo}"
           alt="Sneakers Logo"
           width="138"
           height="20"
         />
-        <button id="cart-icon">
+        <nav-bar></nav-bar>
+        <div id="empty-space"></div>
+        <button id="cart-icon" aria-label="Cart">
           <img
             src="${CartIcon}"
             alt="Cart"
@@ -34,11 +36,10 @@ export default class HeaderComponent extends HTMLElement {
             height="20"
           />
         </button>
-        <figure>
+        <figure id="avatar">
           <img src="${Avatar}" alt="" />
-          <figcaption>Avatar</figcaption>
+          <figcaption class="visually-hidden">Avatar</figcaption>
         </figure>
-        <hr />
       </header>
      `;
   }
