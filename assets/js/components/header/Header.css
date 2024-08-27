@@ -44,17 +44,16 @@
     }
 
     @mixin media-query-large-tablet {
-      --nav-padding-bottom: 34px;
       margin-top: 28px;
-      padding-bottom: var(--nav-padding-bottom);
+      padding-bottom: var(--nav-padding-bottom-desktop);
       align-items: center;
 
       & nav-bar {
-        height: 50px;
+        height: var(--nav-height-desktop);
         order: inherit;
       }
       & #avatar {
-        --avatar-size: 50px;
+        --avatar-size: var(--nav-height-desktop);
         margin-left: 46.18px;
       }
     }
