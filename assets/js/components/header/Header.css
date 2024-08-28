@@ -34,6 +34,37 @@
     & #cart-icon {
       display: flex;
       align-items: center;
+      position: relative;
+
+      &:hover {
+        & svg path {
+          fill: var(--color-very-dark-blue);
+        }
+      }
+
+      &.active {
+        & svg path {
+          fill: var(--color-very-dark-blue);
+        }
+
+        &:after {
+          content: attr(data-quantity);
+          position: absolute;
+          bottom: 13px;
+          left: 9px;
+          width: 19px;
+          height: 13px;
+          background-color: var(--color-orange);
+          border-radius: 6.5px;
+          font-family: var(--default-font-family);
+          font-size: 0.625rem;
+          font-variation-settings: "wght" var(--fw-bold);
+          color: var(--color-white);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
     }
 
     & #avatar {
