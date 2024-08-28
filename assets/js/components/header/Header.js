@@ -1,6 +1,5 @@
 import css from "./Header.css?inline";
 import Logo from "../../../images/logo.svg";
-import CartIcon from "../../../images/icon-cart.svg";
 import Avatar from "../../../images/image-avatar.png";
 import Store from "../../store";
 
