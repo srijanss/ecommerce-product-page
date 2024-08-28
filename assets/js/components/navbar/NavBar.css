@@ -114,6 +114,7 @@
           & a:hover {
             --border-size: 4px;
             position: relative;
+            color: var(--color-very-dark-blue);
             &:after {
               content: "";
               position: absolute;
