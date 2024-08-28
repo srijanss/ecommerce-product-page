@@ -35,6 +35,11 @@ body {
   background-color: var(--color--white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-top: 19px;
+
+  @mixin media-query-large-tablet {
+    padding-top: 28px;
+  }
 }
 img {
   max-inline-size: 100%;
