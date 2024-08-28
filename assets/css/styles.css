@@ -47,7 +47,6 @@ img {
 }
 
 main {
-  position: relative;
   width: 100%;
 
   @mixin media-query-desktop {
