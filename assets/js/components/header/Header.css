@@ -18,6 +18,11 @@
     justify-content: space-between;
     align-items: end;
 
+    @mixin media-query-desktop {
+      width: 1110px;
+      margin: 0 auto;
+    }
+
     & #logo {
       object-fit: contain;
     }
@@ -84,6 +89,12 @@
       & #avatar {
         --avatar-size: var(--nav-height-desktop);
         margin-left: 46.18px;
+      }
+    }
+
+    @mixin media-query-desktop {
+      & #cart-wrapper {
+        position: relative;
       }
     }
   }

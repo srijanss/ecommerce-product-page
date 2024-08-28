@@ -49,4 +49,9 @@ img {
 main {
   position: relative;
   width: 100%;
+
+  @mixin media-query-desktop {
+    width: 1110px;
+    margin: 0 auto;
+  }
 }

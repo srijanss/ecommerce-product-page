@@ -11,7 +11,7 @@
   @mixin visually-hidden;
 
   position: absolute;
-  top: 0;
+  top: calc(50px + 19px + 0.5rem);
   right: calc(50% - 180px);
   width: 360px;
   min-height: 256px;
@@ -120,7 +120,11 @@
       }
     }
   }
-  @mixin media-query-tablet {
-    right: 1.5rem;
+  @mixin media-query-large-mobile {
+    right: 1rem;
+  }
+  @mixin media-query-desktop {
+    top: calc(50% + 30px);
+    right: calc(50% - 180px);
   }
 }

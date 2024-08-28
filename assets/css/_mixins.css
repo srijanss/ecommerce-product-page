@@ -1,5 +1,5 @@
 @define-mixin media-query-desktop {
-  @media (min-width: 1160px) {
+  @media (min-width: 1230px) {
     @mixin-content;
   }
 }
@@ -12,6 +12,12 @@
 
 @define-mixin media-query-tablet {
   @media (min-width: 768px) {
+    @mixin-content;
+  }
+}
+
+@define-mixin media-query-large-mobile {
+  @media (min-width: 551px) {
     @mixin-content;
   }
 }
