@@ -10,11 +10,11 @@
   @mixin css-reset;
   @mixin visually-hidden;
 
-  & article {
+  & .image-gallery {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    & #product-image-list {
+    & .product-image-list {
       --btn-size: 40px;
       --product-image-width: 100vw;
       --product-image-height: 300px;
@@ -23,8 +23,8 @@
       height: var(--product-image-height);
       overflow: hidden;
 
-      & #previous-btn,
-      & #next-btn {
+      & .previous-btn,
+      & .next-btn {
         width: var(--btn-size);
         height: var(--btn-size);
         background-color: var(--color-white);
@@ -49,20 +49,20 @@
         }
       }
 
-      & #previous-btn {
+      & .previous-btn {
         position: absolute;
         top: calc(50% - var(--btn-size) / 2);
         left: 1rem;
         padding-left: calc(var(--btn-size) / 2 - 8px);
       }
-      & #next-btn {
+      & .next-btn {
         position: absolute;
         top: calc(50% - var(--btn-size) / 2);
         right: 1rem;
         padding-left: calc(var(--btn-size) / 2 - 6px);
       }
 
-      & #product-image-container {
+      & .product-image-container {
         --translate-x: 1;
         width: calc(var(--product-image-width) * 6);
         display: flex;
@@ -101,12 +101,12 @@
         --product-image-height: 445px;
         --product-image-width: 445px;
 
-        & #previous-btn,
-        & #next-btn {
+        & .previous-btn,
+        & .next-btn {
           display: none;
         }
 
-        & #product-image-container {
+        & .product-image-container {
           & figure {
             & img {
               border-radius: 15px;
@@ -116,7 +116,7 @@
       }
     }
 
-    & #product-thumbnail-list {
+    & .product-thumbnail-list {
       display: none;
 
       @mixin media-query-medium-tablet {
@@ -150,6 +150,84 @@
           & img {
             border-radius: 10px;
           }
+        }
+      }
+    }
+  }
+
+  & #lightbox {
+    display: none;
+
+    &.open {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-black-75);
+      display: flex;
+      align-items: center;
+    }
+
+    & #lightbox-content {
+      --content-width: 550px;
+      --lightbox-btn-size: 56px;
+      position: relative;
+      width: calc(var(--content-width) + var(--lightbox-btn-size));
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+
+      & #close-btn {
+        align-self: end;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: calc(var(--lightbox-btn-size) / 2);
+        & svg {
+          width: 20px;
+          height: 20px;
+          & path {
+            fill: var(--color-white);
+          }
+        }
+      }
+
+      & .image-gallery {
+        width: 100%;
+
+        & .product-image-list {
+          --btn-size: var(--lightbox-btn-size);
+          --product-image-width: var(--content-width);
+          --product-image-height: var(--content-width);
+          position: static;
+          margin: 0 auto;
+
+          & .previous-btn,
+          & .next-btn {
+            display: flex;
+            & svg {
+              height: 16px;
+              & path {
+                stroke-width: 3px;
+              }
+            }
+          }
+
+          & .previous-btn {
+            top: calc(50% - var(--btn-size) / 2 - 2rem);
+            left: 0;
+          }
+          & .next-btn {
+            top: calc(50% - var(--btn-size) / 2 - 2rem);
+            right: 0;
+          }
+        }
+        & .product-thumbnail-list {
+          justify-content: center;
         }
       }
     }

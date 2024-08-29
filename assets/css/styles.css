@@ -61,7 +61,8 @@ main {
     }
   }
   @mixin media-query-medium-tablet {
-    padding: 90px 3rem;
+    padding: 0 3rem;
+    padding-top: 90px;
   }
   @mixin media-query-desktop {
     width: 1110px;
