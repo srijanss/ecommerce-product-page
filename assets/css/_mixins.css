@@ -10,6 +10,12 @@
   }
 }
 
+@define-mixin media-query-medium-tablet {
+  @media (min-width: 938px) {
+    @mixin-content;
+  }
+}
+
 @define-mixin media-query-tablet {
   @media (min-width: 768px) {
     @mixin-content;
@@ -18,6 +24,12 @@
 
 @define-mixin media-query-large-mobile {
   @media (min-width: 551px) {
+    @mixin-content;
+  }
+}
+
+@define-mixin media-query-medium-mobile {
+  @media (min-width: 400px) {
     @mixin-content;
   }
 }

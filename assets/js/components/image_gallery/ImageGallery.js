@@ -55,7 +55,9 @@ export default class ImageGalleryComponent extends HTMLElement {
           ${this.product.product_images
             .map(
               (productImage, index) => `
-              <button data-productid="${index}" class="product-thumbnail-btn">
+              <button data-productid="${index}" class="product-thumbnail-btn ${
+                index === 0 ? "active" : ""
+              }">
                 <img
                   src="${productImage.thumbnail}"
                   alt="${productImage.alt}"
@@ -149,6 +151,27 @@ export default class ImageGalleryComponent extends HTMLElement {
         e.preventDefault();
         this.handleNextBtnClick();
       }
+    });
+
+    this.thumbnailImageButtons = this.shadow.querySelectorAll(
+      "#product-thumbnail-list button"
+    );
+    Array.from(this.thumbnailImageButtons).forEach((thumbnail) => {
+      thumbnail.addEventListener("click", (e) => {
+        this.removeActiveClassFromThumbnails();
+        e.currentTarget.classList.add("active");
+        this.slideProductImage(
+          this.productImageContainer,
+          Number(e.currentTarget.dataset.productid) + 1,
+          true
+        );
+      });
+    });
+  }
+
+  removeActiveClassFromThumbnails() {
+    Array.from(this.thumbnailImageButtons).forEach((thumbnail) => {
+      thumbnail.classList.remove("active");
     });
   }
 }

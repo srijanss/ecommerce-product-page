@@ -3,6 +3,7 @@
 
 :root {
   --color-white: hsl(0, 0%, 100%);
+  --color-white-75: hsla(0, 0%, 100%, 0.75);
   --color-black: hsl(0, 0%, 0%);
   --color-black-75: hsla(0, 0%, 0%, 0.75);
   --color-light-grayish-blue: hsl(223, 64%, 98%);
@@ -49,6 +50,19 @@ img {
 main {
   width: 100%;
 
+  @mixin media-query-medium-tablet {
+    display: flex;
+    gap: 1rem;
+    padding: 90px 1.5rem;
+
+    & > * {
+      flex: 1;
+      /* border: 1px solid red; */
+    }
+  }
+  @mixin media-query-medium-tablet {
+    padding: 90px 3rem;
+  }
   @mixin media-query-desktop {
     width: 1110px;
     margin: 0 auto;

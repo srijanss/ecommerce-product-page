@@ -11,12 +11,15 @@
   @mixin visually-hidden;
 
   & article {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     & #product-image-list {
       --btn-size: 40px;
       --product-image-width: 100vw;
       --product-image-height: 300px;
       position: relative;
-      width: 100%;
+      width: var(--product-image-width);
       height: var(--product-image-height);
       overflow: hidden;
 
@@ -61,7 +64,7 @@
 
       & #product-image-container {
         --translate-x: 1;
-        width: calc(100% * 6);
+        width: calc(var(--product-image-width) * 6);
         display: flex;
         transform: translateX(
           calc(var(--translate-x) * -1 * var(--product-image-width))
@@ -80,10 +83,75 @@
           }
         }
       }
+
+      @mixin media-query-medium-mobile {
+        /* --product-image-height: 400px; */
+        --product-image-height: 45vh;
+      }
+      @mixin media-query-large-mobile {
+        --product-image-height: 65vh;
+      }
+      @mixin media-query-tablet {
+        --product-image-height: 75vh;
+      }
+      @mixin media-query-medium-tablet {
+        --product-image-height: 85vh;
+      }
+      @mixin media-query-medium-tablet {
+        --product-image-height: 445px;
+        --product-image-width: 445px;
+
+        & #previous-btn,
+        & #next-btn {
+          display: none;
+        }
+
+        & #product-image-container {
+          & figure {
+            & img {
+              border-radius: 15px;
+            }
+          }
+        }
+      }
     }
 
     & #product-thumbnail-list {
       display: none;
+
+      @mixin media-query-medium-tablet {
+        display: flex;
+        gap: 31px;
+
+        & button {
+          --thumbnail-size: 88px;
+          width: var(--thumbnail-size);
+          height: var(--thumbnail-size);
+          position: relative;
+          &.active,
+          &:hover {
+            &:after {
+              content: "";
+              position: absolute;
+              top: -1px;
+              left: -1px;
+              width: calc(100% + 2px);
+              height: calc(100% + 2px);
+              border-radius: 10px;
+              border: 2px solid var(--color-orange);
+              background-image: linear-gradient(
+                to right,
+                var(--color-white-75),
+                var(--color-white-75)
+              );
+            }
+          }
+
+          & img {
+            border-radius: 10px;
+          }
+        }
+      }
     }
   }
 }
