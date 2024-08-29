@@ -1,0 +1,89 @@
+@import "../../../css/_mixins.css";
+
+:host *,
+:host *:before,
+:host *:after {
+  box-sizing: border-box;
+}
+
+:host {
+  @mixin css-reset;
+  @mixin visually-hidden;
+
+  & article {
+    & #product-image-list {
+      --btn-size: 40px;
+      --product-image-width: 100vw;
+      --product-image-height: 300px;
+      position: relative;
+      width: 100%;
+      height: var(--product-image-height);
+      overflow: hidden;
+
+      & #previous-btn,
+      & #next-btn {
+        width: var(--btn-size);
+        height: var(--btn-size);
+        background-color: var(--color-white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        z-index: 100;
+
+        & svg {
+          height: 12px;
+          & path {
+            stroke-width: 4px;
+          }
+        }
+
+        &:hover {
+          & svg {
+            & path {
+              stroke: var(--color-orange);
+            }
+          }
+        }
+      }
+
+      & #previous-btn {
+        position: absolute;
+        top: calc(50% - var(--btn-size) / 2);
+        left: 1rem;
+        padding-left: calc(var(--btn-size) / 2 - 8px);
+      }
+      & #next-btn {
+        position: absolute;
+        top: calc(50% - var(--btn-size) / 2);
+        right: 1rem;
+        padding-left: calc(var(--btn-size) / 2 - 6px);
+      }
+
+      & #product-image-container {
+        --translate-x: 0;
+        width: calc(100% * 4);
+        display: flex;
+        transform: translateX(
+          calc(var(--translate-x) * -1 * var(--product-image-width))
+        );
+        transition: transform 0.3s ease-in-out;
+
+        & button {
+          width: var(--product-image-width);
+          height: var(--product-image-height);
+
+          & img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+          }
+        }
+      }
+    }
+
+    & #product-thumbnail-list {
+      display: none;
+    }
+  }
+}
