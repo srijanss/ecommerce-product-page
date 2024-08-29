@@ -60,15 +60,15 @@
       }
 
       & #product-image-container {
-        --translate-x: 0;
-        width: calc(100% * 4);
+        --translate-x: 1;
+        width: calc(100% * 6);
         display: flex;
         transform: translateX(
           calc(var(--translate-x) * -1 * var(--product-image-width))
         );
-        transition: transform 0.3s ease-in-out;
+        transition: var(--transition, transform 0.3s ease-in-out);
 
-        & button {
+        & figure {
           width: var(--product-image-width);
           height: var(--product-image-height);
 

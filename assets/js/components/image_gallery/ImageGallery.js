@@ -5,12 +5,17 @@ export default class ImageGalleryComponent extends HTMLElement {
   constructor() {
     super();
     this.product = Store.product;
-    this.productImagePosition = 0;
+    this.productImagePosition = 1;
+    this.transitionDuration = 300;
   }
 
   connectedCallback() {
     this.shadow = this.attachShadow({ mode: "open" });
     this.render();
+    this.productImageContainer = this.shadow.getElementById(
+      "product-image-container"
+    );
+    this.renderProductImageListForInfinityScroll();
     this.handleEvents();
   }
 
@@ -31,9 +36,10 @@ export default class ImageGalleryComponent extends HTMLElement {
             ${this.product.product_images
               .map(
                 (productImage, index) => `
-                <button data-productid="${index}" class="product-image-btn">
-                  <img src="${productImage.main}" alt="${productImage.alt}" />
-                </button>
+                <figure data-productid="${index}" class="product-image-btn">
+                  <img src="${productImage.main}" alt="" />
+                  <figcaption>${productImage.alt}</figcaption>
+                </figure>
               `
               )
               .join("")}
@@ -63,36 +69,86 @@ export default class ImageGalleryComponent extends HTMLElement {
     `;
   }
 
-  handleEvents() {
-    const productImageContainer = this.shadow.getElementById(
-      "product-image-container"
+  renderProductImageListForInfinityScroll() {
+    const productImageBtns = this.productImageContainer.children;
+    this.productImageContainer.appendChild(productImageBtns[0].cloneNode(true));
+    this.productImageContainer.prepend(
+      productImageBtns[productImageBtns.length - 2].cloneNode(true)
     );
+  }
+
+  slideProductImage(slider, index, disableTransition) {
+    if (disableTransition) {
+      slider.setAttribute(
+        "style",
+        `--translate-x: ${index}; --transition: none`
+      );
+    } else {
+      slider.setAttribute("style", `--translate-x: ${index}`);
+    }
+  }
+
+  handlePreviousBtnClick() {
+    this.productImagePosition -= 1;
+    this.slideProductImage(
+      this.productImageContainer,
+      this.productImagePosition
+    );
+    if (this.productImagePosition === 0) {
+      setTimeout(() => {
+        this.productImagePosition =
+          this.productImageContainer.children.length - 2;
+        this.slideProductImage(
+          this.productImageContainer,
+          this.productImagePosition,
+          true
+        );
+      }, this.transitionDuration);
+    }
+  }
+
+  handleNextBtnClick() {
+    this.productImagePosition += 1;
+    this.slideProductImage(
+      this.productImageContainer,
+      this.productImagePosition
+    );
+    if (
+      this.productImagePosition ===
+      this.productImageContainer.children.length - 1
+    ) {
+      setTimeout(() => {
+        this.productImagePosition = 1;
+        this.slideProductImage(
+          this.productImageContainer,
+          this.productImagePosition,
+          true
+        );
+      }, this.transitionDuration);
+    }
+  }
+
+  handleEvents() {
     const previousBtn = this.shadow.getElementById("previous-btn");
     previousBtn.addEventListener("click", (e) => {
-      if (this.productImagePosition === 0) {
-        this.productImagePosition = 0;
-      } else {
-        this.productImagePosition -= 1;
+      this.handlePreviousBtnClick();
+    });
+    previousBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        this.handlePreviousBtnClick();
       }
-      console.log(this.productImagePosition);
-      productImageContainer.setAttribute(
-        "style",
-        `--translate-x: ${this.productImagePosition}`
-      );
     });
 
     const nextBtn = this.shadow.getElementById("next-btn");
     nextBtn.addEventListener("click", (e) => {
-      if (this.productImagePosition === 3) {
-        this.productImagePosition = 3;
-      } else {
-        this.productImagePosition += 1;
+      this.handleNextBtnClick();
+    });
+    nextBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        this.handleNextBtnClick();
       }
-      console.log(this.productImagePosition);
-      productImageContainer.setAttribute(
-        "style",
-        `--translate-x: ${this.productImagePosition}`
-      );
     });
   }
 }
