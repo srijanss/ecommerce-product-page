@@ -4,6 +4,7 @@
 :root {
   --color-white: hsl(0, 0%, 100%);
   --color-white-75: hsla(0, 0%, 100%, 0.75);
+  --color-white-50: hsla(0, 0%, 100%, 0.5);
   --color-black: hsl(0, 0%, 0%);
   --color-black-75: hsla(0, 0%, 0%, 0.75);
   --color-light-grayish-blue: hsl(223, 64%, 98%);

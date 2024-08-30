@@ -138,6 +138,15 @@
               width: calc(100% + 2px);
               height: calc(100% + 2px);
               border-radius: 10px;
+              background-image: linear-gradient(
+                to right,
+                var(--color-white-50),
+                var(--color-white-50)
+              );
+            }
+          }
+          &.active {
+            &:after {
               border: 2px solid var(--color-orange);
               background-image: linear-gradient(
                 to right,
@@ -192,6 +201,14 @@
           height: 20px;
           & path {
             fill: var(--color-white);
+          }
+        }
+
+        &:hover {
+          & svg {
+            & path {
+              fill: var(--color-orange);
+            }
           }
         }
       }
