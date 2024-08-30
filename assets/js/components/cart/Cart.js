@@ -39,7 +39,6 @@ export default class CartComponent extends HTMLElement {
       this.dialog.focus();
       this.focusableElements = this.dialog.querySelectorAll("a, button");
       Array.from(this.focusableElements).forEach((element) => {
-        element.setAttribute("tabindex", "0");
         element.setAttribute("aria-hidden", "false");
       });
       this.handleEvents();
@@ -100,19 +99,23 @@ export default class CartComponent extends HTMLElement {
     `;
   }
 
-  handleEvents() {
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        this.hideCallback();
-      }
-    });
-
+  setFocusTrap() {
     Array.from(this.focusableElements).forEach((element) => {
       element.addEventListener("keydown", (e) => {
         if (e.key === "Tab") {
-          if (e.currentTarget === this.focusableElements[1]) {
-            e.preventDefault();
-            this.focusableElements[0].focus();
+          if (e.shiftKey) {
+            if (e.currentTarget === this.focusableElements[0]) {
+              e.preventDefault();
+              this.focusableElements[this.focusableElements.length - 1].focus();
+            }
+          } else {
+            if (
+              e.currentTarget ===
+              this.focusableElements[this.focusableElements.length - 1]
+            ) {
+              e.preventDefault();
+              this.focusableElements[0].focus();
+            }
           }
         }
       });
@@ -123,10 +126,19 @@ export default class CartComponent extends HTMLElement {
       cartEmptyRegion.addEventListener("keydown", (e) => {
         if (e.key === "Tab") {
           e.preventDefault();
-          this.hideCallback();
         }
       });
     }
+  }
+
+  handleEvents() {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        this.hideCallback();
+      }
+    });
+
+    this.setFocusTrap();
 
     const deleteButtons = this.shadow.querySelectorAll("#delete-icon");
     Array.from(deleteButtons).forEach((button) => {
