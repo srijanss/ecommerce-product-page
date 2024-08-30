@@ -138,7 +138,7 @@ export default class NavBar extends HTMLElement {
     const focusableElements = this.menu.querySelectorAll("button, a");
     Array.from(focusableElements).forEach((element) => {
       element.addEventListener("keydown", (event) => {
-        if (event.key === "Tab") {
+        if (event.key === "Tab" && this.hamburgerIconVisible) {
           if (event.shiftKey) {
             if (element === focusableElements[0]) {
               event.preventDefault();
