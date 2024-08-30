@@ -176,6 +176,7 @@
       background-color: var(--color-black-75);
       display: flex;
       align-items: center;
+      z-index: 102;
     }
 
     & #lightbox-content {
