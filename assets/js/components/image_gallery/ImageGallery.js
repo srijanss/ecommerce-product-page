@@ -16,10 +16,13 @@ export default class ImageGalleryComponent extends HTMLElement {
   connectedCallback() {
     this.shadow = this.attachShadow({ mode: "open" });
     this.render();
-    this.productImageContainer = this.shadow.getElementById(
-      "product-image-container"
-    );
+    this.slider = this.shadow.getElementById("product-image-container");
     this.renderProductImageListForInfinityScroll();
+    this.lightbox = new LightBox(this);
+    if (!this.lightboxRendered) {
+      this.lightbox.renderLightbox();
+      this.lightboxRendered = true;
+    }
     this.setProductImageButtonAttributes();
     this.handleEvents();
   }
@@ -86,20 +89,24 @@ export default class ImageGalleryComponent extends HTMLElement {
     `;
   }
 
+  setProductImageCurrentIndex(index) {
+    this.productImageCurrentIndex = index;
+  }
+
+  setProductImageOldIndex(index) {
+    this.productImageOldIndex = index;
+  }
+
   renderProductImageListForInfinityScroll() {
-    const productImageBtns = this.productImageContainer.children;
-    this.productImageContainer.appendChild(productImageBtns[0].cloneNode(true));
-    this.productImageContainer.prepend(
+    const productImageBtns = this.slider.children;
+    this.slider.appendChild(productImageBtns[0].cloneNode(true));
+    this.slider.prepend(
       productImageBtns[productImageBtns.length - 2].cloneNode(true)
     );
   }
 
   setProductImageButtonAttributes() {
     const productImageList = this.shadow.getElementById("product-image-list");
-    if (!this.lightboxRendered) {
-      this.renderLightbox();
-      this.lightboxRendered = true;
-    }
     if (
       window.innerWidth >= this.lightboxEnabledScreenSize &&
       !this.productImageButtonAttributesSet
@@ -107,10 +114,12 @@ export default class ImageGalleryComponent extends HTMLElement {
       productImageList.setAttribute("role", "button");
       productImageList.setAttribute("tabindex", "0");
       productImageList.setAttribute("style", "cursor: pointer");
-      productImageList.addEventListener("click", () => this.showLightbox());
+      productImageList.addEventListener("click", () =>
+        this.lightbox.showLightbox()
+      );
       productImageList.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
-          this.showLightbox();
+          this.lightbox.showLightbox();
         }
       });
 
@@ -161,34 +170,6 @@ export default class ImageGalleryComponent extends HTMLElement {
     }
   }
 
-  handleEvents() {
-    window.addEventListener("resize", (e) => {
-      if (window.innerWidth < this.lightboxEnabledScreenSize) {
-        this.removeProductImageButtonAttributes();
-      } else {
-        this.setProductImageButtonAttributes();
-      }
-    });
-    const previousBtn = this.shadow.getElementById("previous-btn");
-    previousBtn.addEventListener("click", (e) => {
-      this.handlePreviousBtnClick(this.productImageContainer);
-    });
-
-    const nextBtn = this.shadow.getElementById("next-btn");
-    nextBtn.addEventListener("click", (e) => {
-      this.handleNextBtnClick(this.productImageContainer);
-    });
-
-    const thumbnailImageButtons = this.shadow.querySelectorAll(
-      "#product-thumbnail-list button"
-    );
-
-    this.handleThumbnailClick(
-      thumbnailImageButtons,
-      this.productImageContainer
-    );
-  }
-
   handleThumbnailClick(thumbnailList, slider) {
     Array.from(thumbnailList).forEach((thumbnail) => {
       thumbnail.addEventListener("click", (e) => {
@@ -214,8 +195,42 @@ export default class ImageGalleryComponent extends HTMLElement {
     });
   }
 
+  handleEvents() {
+    window.addEventListener("resize", (e) => {
+      if (window.innerWidth < this.lightboxEnabledScreenSize) {
+        this.removeProductImageButtonAttributes();
+      } else {
+        this.setProductImageButtonAttributes();
+      }
+    });
+    const previousBtn = this.shadow.getElementById("previous-btn");
+    previousBtn.addEventListener("click", (e) => {
+      this.handlePreviousBtnClick(this.slider);
+    });
+
+    const nextBtn = this.shadow.getElementById("next-btn");
+    nextBtn.addEventListener("click", (e) => {
+      this.handleNextBtnClick(this.slider);
+    });
+
+    const thumbnailImageButtons = this.shadow.querySelectorAll(
+      "#product-thumbnail-list button"
+    );
+
+    this.handleThumbnailClick(thumbnailImageButtons, this.slider);
+  }
+}
+
+class LightBox {
+  constructor(imageGallery) {
+    this.imageGallery = imageGallery;
+    this.shadow = this.imageGallery.shadow;
+  }
+
   renderLightbox() {
-    this.productImageOldIndex = this.productImageCurrentIndex;
+    this.imageGallery.setProductImageOldIndex(
+      this.imageGallery.productImageCurrentIndex
+    );
     const lightBoxContainer = this.shadow.getElementById("lightbox-content");
     const imageGallery = this.shadow.getElementById("image-gallery");
     const imageGalleryClone = imageGallery.cloneNode(true);
@@ -225,80 +240,85 @@ export default class ImageGalleryComponent extends HTMLElement {
       element.id += "-lightbox";
     });
     lightBoxContainer.appendChild(imageGalleryClone);
+    this.setLightboxComponents();
     this.handleLightboxEvents();
   }
 
-  selectInitialLightboxThumbnail() {
-    const thumbnailImageButtons = this.shadow.querySelectorAll(
-      "#product-thumbnail-list-lightbox button"
-    );
-    const initialThumbnail = Array.from(thumbnailImageButtons).find(
-      (thumbnail) =>
-        Number(thumbnail.dataset.productid) + 1 ===
-        this.productImageCurrentIndex
-    );
-    const slider = this.shadow.getElementById(
+  setLightboxComponents() {
+    this.lightbox = this.shadow.getElementById("lightbox");
+    this.slider = this.shadow.getElementById(
       "product-image-container-lightbox"
     );
-    this.showProductOnThumbnailClick(
-      thumbnailImageButtons,
+    this.thumbnailImageButtons = this.shadow.querySelectorAll(
+      "#product-thumbnail-list-lightbox button"
+    );
+  }
+
+  selectInitialLightboxThumbnail() {
+    const initialThumbnail = Array.from(this.thumbnailImageButtons).find(
+      (thumbnail) =>
+        Number(thumbnail.dataset.productid) + 1 ===
+        this.imageGallery.productImageCurrentIndex
+    );
+
+    this.imageGallery.showProductOnThumbnailClick(
+      this.thumbnailImageButtons,
       initialThumbnail,
-      slider
+      this.slider
     );
   }
 
   showLightbox() {
-    if (window.innerWidth >= this.lightboxEnabledScreenSize) {
+    if (window.innerWidth >= this.imageGallery.lightboxEnabledScreenSize) {
       this.selectInitialLightboxThumbnail();
-      const lightbox = this.shadow.getElementById("lightbox");
-      lightbox.classList.add("open");
+      this.lightbox.classList.add("open");
     }
   }
 
   hideLightbox() {
-    const lightbox = this.shadow.getElementById("lightbox");
-    lightbox.classList.remove("open");
+    this.imageGallery.setProductImageCurrentIndex(
+      this.imageGallery.productImageOldIndex
+    );
+    this.lightbox.classList.remove("open");
   }
 
   handleLightboxEvents() {
-    const slider = this.shadow.getElementById(
-      "product-image-container-lightbox"
-    );
-    const thumbnailImageButtons = this.shadow.querySelectorAll(
-      "#product-thumbnail-list-lightbox button"
-    );
     const closeLightBoxBtn = this.shadow.getElementById("close-btn");
-    closeLightBoxBtn.addEventListener("click", (e) => {
-      this.productImageCurrentIndex = this.productImageOldIndex;
-      this.hideLightbox();
-    });
+    closeLightBoxBtn.addEventListener("click", this.hideLightbox.bind(this));
 
     const previousBtn = this.shadow.getElementById("previous-btn-lightbox");
     previousBtn.addEventListener("click", (e) => {
-      this.handlePreviousBtnClick(slider);
-      this.removeActiveClassFromThumbnails(thumbnailImageButtons);
+      this.imageGallery.handlePreviousBtnClick(this.slider);
+      this.imageGallery.removeActiveClassFromThumbnails(
+        this.thumbnailImageButtons
+      );
       setTimeout(() => {
-        this.markActiveThumbnail(thumbnailImageButtons);
-      }, this.transitionDuration);
+        this.markActiveThumbnail();
+      }, this.imageGallery.transitionDuration);
     });
 
     const nextBtn = this.shadow.getElementById("next-btn-lightbox");
     nextBtn.addEventListener("click", (e) => {
-      this.handleNextBtnClick(slider);
-      this.removeActiveClassFromThumbnails(thumbnailImageButtons);
+      this.imageGallery.handleNextBtnClick(this.slider);
+      this.imageGallery.removeActiveClassFromThumbnails(
+        this.thumbnailImageButtons
+      );
       setTimeout(() => {
-        this.markActiveThumbnail(thumbnailImageButtons);
-      }, this.transitionDuration);
+        this.markActiveThumbnail();
+      }, this.imageGallery.transitionDuration);
     });
 
-    this.handleThumbnailClick(thumbnailImageButtons, slider);
+    this.imageGallery.handleThumbnailClick(
+      this.thumbnailImageButtons,
+      this.slider
+    );
   }
 
-  markActiveThumbnail(thumbnailList) {
-    Array.from(thumbnailList).forEach((thumbnail) => {
+  markActiveThumbnail() {
+    Array.from(this.thumbnailImageButtons).forEach((thumbnail) => {
       if (
         Number(thumbnail.dataset.productid) + 1 ===
-        this.productImageCurrentIndex
+        this.imageGallery.productImageCurrentIndex
       ) {
         thumbnail.classList.add("active");
       }
