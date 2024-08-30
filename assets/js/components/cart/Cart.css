@@ -15,7 +15,6 @@
   right: calc(50% - 180px);
   width: 360px;
   min-height: 256px;
-  padding-top: 0.5rem;
   display: flex;
 
   & article {
@@ -26,6 +25,7 @@
     background-color: var(--color-white);
     box-shadow: 0 20px 50px -20px #1d202650;
     padding: 1.5rem 0;
+    z-index: 101;
 
     & h2 {
       padding-left: 1.5rem;
