@@ -80,7 +80,6 @@ export default class NavBar extends HTMLElement {
     this.closeIcon = this.shadow.getElementById("close-icon");
     this.menu = this.shadow.getElementById("menu");
     this.linkList = this.shadow.querySelectorAll("nav a");
-    this.lastMenuItem = this.linkList[this.linkList.length - 1];
     this.setFocusableElements();
     this.handleEvents();
   }
@@ -135,10 +134,39 @@ export default class NavBar extends HTMLElement {
     }
   }
 
+  setFocusTrap() {
+    const focusableElements = this.menu.querySelectorAll("button, a");
+    Array.from(focusableElements).forEach((element) => {
+      element.addEventListener("keydown", (event) => {
+        if (event.key === "Tab") {
+          if (event.shiftKey) {
+            if (element === focusableElements[0]) {
+              event.preventDefault();
+              focusableElements[focusableElements.length - 1].focus();
+            }
+          } else {
+            if (element === focusableElements[focusableElements.length - 1]) {
+              event.preventDefault();
+              focusableElements[0].focus();
+            }
+          }
+        }
+      });
+    });
+  }
+
   handleEvents() {
     window.addEventListener("resize", () => {
       this.setFocusableElements();
     });
+
+    this.menu.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        this.closeMenu();
+      }
+    });
+    this.setFocusTrap();
+
     this.hamburgerIcon.addEventListener("click", () => {
       this.openMenu();
     });
@@ -152,14 +180,6 @@ export default class NavBar extends HTMLElement {
         this.closeMenu();
       });
       link.addEventListener("keydown", (event) => {
-        if (link === this.lastMenuItem) {
-          if (event.key === "Tab") {
-            if (this.hamburgerIconVisible) {
-              event.preventDefault();
-              this.closeIcon.focus();
-            }
-          }
-        }
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           setTimeout(() => {
