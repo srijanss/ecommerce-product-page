@@ -7,6 +7,7 @@
   --color-white-50: hsla(0, 0%, 100%, 0.5);
   --color-black: hsl(0, 0%, 0%);
   --color-black-75: hsla(0, 0%, 0%, 0.75);
+  --color-error: hsl(0, 100%, 74%);
   --color-light-grayish-blue: hsl(223, 64%, 98%);
   --color-grayish-blue: hsl(220, 14%, 75%);
   --color-dark-grayish-blue: hsl(219, 9%, 45%);
@@ -53,20 +54,22 @@ main {
 
   @mixin media-query-medium-tablet {
     display: flex;
+    justify-content: space-around;
     gap: 1rem;
-    padding: 90px 1.5rem;
+    padding: 90px 1rem 0;
 
-    & > * {
-      flex: 1;
-      /* border: 1px solid red; */
-    }
+    /* & > * {
+       flex: 1;
+      border: 1px solid red; 
+    } */
   }
-  @mixin media-query-medium-tablet {
-    padding: 0 3rem;
-    padding-top: 90px;
+  @mixin media-query-large-tablet {
+    padding: 90px 1.5rem 0;
   }
   @mixin media-query-desktop {
     width: 1110px;
     margin: 0 auto;
+    padding-top: 90px 3rem 0;
+    justify-content: space-between;
   }
 }
