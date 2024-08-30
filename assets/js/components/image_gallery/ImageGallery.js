@@ -59,13 +59,13 @@ export default class ImageGalleryComponent extends HTMLElement {
             </svg>
           </button>
         </section>
-        <section id="product-thumbnail-list" class="product-thumbnail-list"  aria-label="Product thumbnails">
+        <section id="product-thumbnail-list" class="product-thumbnail-list"  aria-label="Product thumbnails" role="radiogroup">
           ${this.product.product_images
             .map(
               (productImage, index) => `
               <button data-productid="${index}" class="product-thumbnail-btn ${
                 index === 0 ? "active" : ""
-              }">
+              }" role="radio" aria-checked="${index === 0 ? "true" : "false"}">
                 <img
                   src="${productImage.thumbnail}"
                   alt="${productImage.alt}"
@@ -76,7 +76,7 @@ export default class ImageGalleryComponent extends HTMLElement {
             .join("")}
         </section>
       </article>
-      <article id="lightbox" class="lightbox" aria-label="Product image lightbox">
+      <article id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Product image lightbox" tabindex="-1">
         <div id="lightbox-content">
           <button id="close-btn" aria-label="Close">
             <svg width="14" height="15" viewBox="0 0 14 15" xmlns="http://www.w3.org/2000/svg" aria-labelledby="close-svg-icon" aria-hidden="true" focusable="false">
@@ -105,6 +105,12 @@ export default class ImageGalleryComponent extends HTMLElement {
     );
   }
 
+  setFocusToProductImageList() {
+    const productImageList = this.shadow.getElementById("product-image-list");
+    productImageList.setAttribute("aria-expanded", "false");
+    productImageList.focus();
+  }
+
   setProductImageButtonAttributes() {
     const productImageList = this.shadow.getElementById("product-image-list");
     if (
@@ -112,13 +118,18 @@ export default class ImageGalleryComponent extends HTMLElement {
       !this.productImageButtonAttributesSet
     ) {
       productImageList.setAttribute("role", "button");
+      productImageList.setAttribute("aria-haspopup", "dialog");
+      productImageList.setAttribute("aria-expanded", "false");
+      productImageList.setAttribute("aria-controls", "lightbox");
       productImageList.setAttribute("tabindex", "0");
       productImageList.setAttribute("style", "cursor: pointer");
-      productImageList.addEventListener("click", () =>
-        this.lightbox.showLightbox()
-      );
+      productImageList.addEventListener("click", () => {
+        productImageList.setAttribute("aria-expanded", "true");
+        this.lightbox.showLightbox();
+      });
       productImageList.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
+          productImageList.setAttribute("aria-expanded", "true");
           this.lightbox.showLightbox();
         }
       });
@@ -131,6 +142,9 @@ export default class ImageGalleryComponent extends HTMLElement {
     if (this.productImageButtonAttributesSet) {
       const productImageList = this.shadow.getElementById("product-image-list");
       productImageList.removeAttribute("role");
+      productImageList.removeAttribute("aria-haspopup");
+      productImageList.removeAttribute("aria-expanded");
+      productImageList.removeAttribute("aria-controls");
       productImageList.removeAttribute("tabindex");
       productImageList.setAttribute("style", "cursor: default");
       this.productImageButtonAttributesSet = false;
@@ -180,6 +194,7 @@ export default class ImageGalleryComponent extends HTMLElement {
 
   showActiveProductImage(thumbnailList, thumbnail, slider) {
     this.removeActiveClassFromThumbnails(thumbnailList);
+    thumbnail.setAttribute("aria-checked", "true");
     thumbnail.classList.add("active");
     this.productImageCurrentIndex = Number(thumbnail.dataset.productid) + 1;
     this.slideProductImage(
@@ -191,6 +206,7 @@ export default class ImageGalleryComponent extends HTMLElement {
 
   removeActiveClassFromThumbnails(thumbnailList) {
     Array.from(thumbnailList).forEach((thumbnail) => {
+      thumbnail.setAttribute("aria-checked", "false");
       thumbnail.classList.remove("active");
     });
   }
@@ -241,6 +257,7 @@ class LightBox {
     });
     lightBoxContainer.appendChild(imageGalleryClone);
     this.setLightboxComponents();
+    this.setFocusableElements();
     this.handleLightboxEvents();
   }
 
@@ -252,6 +269,10 @@ class LightBox {
     this.thumbnailImageButtons = this.shadow.querySelectorAll(
       "#product-thumbnail-list-lightbox button"
     );
+  }
+
+  setFocusableElements() {
+    this.focusableElements = this.lightbox.querySelectorAll("button");
   }
 
   selectActiveLightboxThumbnail() {
@@ -272,6 +293,7 @@ class LightBox {
     if (window.innerWidth >= this.imageGallery.lightboxEnabledScreenSize) {
       this.selectActiveLightboxThumbnail();
       this.lightbox.classList.add("open");
+      this.lightbox.focus();
     }
   }
 
@@ -280,9 +302,39 @@ class LightBox {
       this.imageGallery.productImageOldIndex
     );
     this.lightbox.classList.remove("open");
+    this.imageGallery.setFocusToProductImageList();
+  }
+
+  setFocusTrap() {
+    Array.from(this.focusableElements).forEach((element) => {
+      element.addEventListener("keydown", (e) => {
+        if (e.key === "Tab") {
+          if (e.shiftKey) {
+            if (e.currentTarget === this.focusableElements[0]) {
+              e.preventDefault();
+              this.focusableElements[this.focusableElements.length - 1].focus();
+            }
+          } else {
+            if (
+              e.currentTarget ===
+              this.focusableElements[this.focusableElements.length - 1]
+            ) {
+              e.preventDefault();
+              this.focusableElements[0].focus();
+            }
+          }
+        }
+      });
+    });
   }
 
   handleLightboxEvents() {
+    this.lightbox.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        this.hideLightbox();
+      }
+    });
+    this.setFocusTrap();
     const closeLightBoxBtn = this.shadow.getElementById("close-btn");
     closeLightBoxBtn.addEventListener("click", this.hideLightbox.bind(this));
 
