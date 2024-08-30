@@ -44,7 +44,7 @@ export default class ImageGalleryComponent extends HTMLElement {
             ${this.product.product_images
               .map(
                 (productImage, index) => `
-                <figure data-productid="${index}" class="product-image">
+                <figure data-productid="${index}" class="product-image" aria-hidden="true">
                   <img src="${productImage.main}" alt="" />
                   <figcaption class="visually-hidden">${productImage.alt}</figcaption>
                 </figure>
