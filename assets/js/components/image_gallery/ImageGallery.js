@@ -223,6 +223,9 @@ export default class ImageGalleryComponent extends HTMLElement {
     const slider = this.shadow.getElementById(
       "product-image-container-lightbox"
     );
+    const thumbnailImageButtons = this.shadow.querySelectorAll(
+      "#product-thumbnail-list-lightbox button"
+    );
     const closeBtn = this.shadow.getElementById("close-btn");
     closeBtn.addEventListener("click", (e) => {
       this.productImageCurrentIndex = this.productImageOldIndex;
@@ -232,16 +235,32 @@ export default class ImageGalleryComponent extends HTMLElement {
     const previousBtn = this.shadow.getElementById("previous-btn-lightbox");
     previousBtn.addEventListener("click", (e) => {
       this.handlePreviousBtnClick(slider);
+      this.removeActiveClassFromThumbnails(thumbnailImageButtons);
+      setTimeout(() => {
+        this.markActiveThumbnail(thumbnailImageButtons);
+      }, this.transitionDuration);
     });
 
     const nextBtn = this.shadow.getElementById("next-btn-lightbox");
     nextBtn.addEventListener("click", (e) => {
       this.handleNextBtnClick(slider);
+      this.removeActiveClassFromThumbnails(thumbnailImageButtons);
+      setTimeout(() => {
+        this.markActiveThumbnail(thumbnailImageButtons);
+      }, this.transitionDuration);
     });
 
-    const thumbnailImageButtons = this.shadow.querySelectorAll(
-      "#product-thumbnail-list-lightbox button"
-    );
     this.handleThumbnailClick(thumbnailImageButtons, slider);
+  }
+
+  markActiveThumbnail(thumbnailList) {
+    Array.from(thumbnailList).forEach((thumbnail) => {
+      if (
+        Number(thumbnail.dataset.productid) + 1 ===
+        this.productImageCurrentIndex
+      ) {
+        thumbnail.classList.add("active");
+      }
+    });
   }
 }
