@@ -222,8 +222,8 @@ export default class ImageGalleryComponent extends HTMLElement {
 }
 
 class LightBox {
-  constructor(imageGallery) {
-    this.imageGallery = imageGallery;
+  constructor(imageGalleryComponent) {
+    this.imageGallery = imageGalleryComponent;
     this.shadow = this.imageGallery.shadow;
   }
 
@@ -232,8 +232,8 @@ class LightBox {
       this.imageGallery.productImageCurrentIndex
     );
     const lightBoxContainer = this.shadow.getElementById("lightbox-content");
-    const imageGallery = this.shadow.getElementById("image-gallery");
-    const imageGalleryClone = imageGallery.cloneNode(true);
+    const imageGalleryEl = this.shadow.getElementById("image-gallery");
+    const imageGalleryClone = imageGalleryEl.cloneNode(true);
     imageGalleryClone.id += "-lightbox";
     const elementsWithId = imageGalleryClone.querySelectorAll("[id]");
     Array.from(elementsWithId).forEach((element) => {
