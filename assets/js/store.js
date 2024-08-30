@@ -73,6 +73,7 @@ class Store {
       if (item.id === product.id) {
         item.quantity += qty;
         item.subtotal = item.current_price * item.quantity;
+        this.notify();
         return;
       }
     }
@@ -85,6 +86,10 @@ class Store {
   removeFromCart(productId) {
     this._cart = this._cart.filter((item) => item.id !== productId);
     this.notify();
+  }
+
+  getCartQuantity() {
+    return this._cart.reduce((acc, item) => acc + item.quantity, 0);
   }
 
   subscribe(observer) {
