@@ -16,7 +16,7 @@ export default class CartComponent extends HTMLElement {
 
   update(cart) {
     this.cart = cart;
-    this.render();
+    // this.render();
   }
 
   render() {
