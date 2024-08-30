@@ -9,6 +9,11 @@ import ProductThumbnail4 from "../images/image-product-4-thumbnail.jpg";
 
 class Store {
   constructor() {
+    this.CART_STATUS = {
+      CLOSED: 0,
+      OPENED: 1,
+    };
+    this._cartStatus = this.CART_STATUS.CLOSED;
     this._product = {
       id: 1,
       sku: "fall-limited-edition-sneakers",
@@ -54,6 +59,15 @@ class Store {
     return this._cart;
   }
 
+  get cartStatus() {
+    return this._cartStatus;
+  }
+
+  set cartStatus(status) {
+    this._cartStatus = status;
+    this.notifyCartStatus(status);
+  }
+
   addToCart(product, qty) {
     for (let item of this._cart) {
       if (item.id === product.id) {
@@ -80,6 +94,13 @@ class Store {
   notify() {
     for (let observer of this._observers) {
       observer.update(this.cart);
+    }
+  }
+  notifyCartStatus(status) {
+    for (let observer of this._observers) {
+      if (observer.updateCartStatus) {
+        observer.updateCartStatus(status);
+      }
     }
   }
 }

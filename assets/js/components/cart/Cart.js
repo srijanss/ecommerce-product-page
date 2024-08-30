@@ -45,13 +45,14 @@ export default class CartComponent extends HTMLElement {
     }, 1);
   }
 
-  showModal(hideCallback) {
-    this.hideCallback = hideCallback;
+  showModal() {
     this.render();
+    Store.cartStatus = Store.CART_STATUS.OPENED;
   }
 
   hideModal() {
     this.shadow.innerHTML = "";
+    Store.cartStatus = Store.CART_STATUS.CLOSED;
   }
 
   renderEmptyCart() {
@@ -132,9 +133,10 @@ export default class CartComponent extends HTMLElement {
   }
 
   handleEvents() {
-    document.addEventListener("keydown", (e) => {
+    const cartPopup = this.shadow.querySelector("#cart-popup");
+    cartPopup.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        this.hideCallback();
+        this.hideModal();
       }
     });
 

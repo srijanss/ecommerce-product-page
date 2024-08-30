@@ -75,16 +75,22 @@ export default class HeaderComponent extends HTMLElement {
   }
 
   renderCartComponent() {
-    this.cartComponent.showModal(this.hideCartComponent.bind(this));
-    this.cartComponentVisible = true;
-    this.cartIcon.setAttribute("aria-expanded", "true");
+    this.cartComponent.showModal();
   }
 
   hideCartComponent() {
     this.cartComponent.hideModal();
-    this.cartComponentVisible = false;
-    this.cartIcon.setAttribute("aria-expanded", "false");
-    this.cartIcon.focus();
+  }
+
+  updateCartStatus(status) {
+    if (status === Store.CART_STATUS.CLOSED) {
+      this.cartComponentVisible = false;
+      this.cartIcon.setAttribute("aria-expanded", "false");
+      this.cartIcon.focus();
+    } else {
+      this.cartComponentVisible = true;
+      this.cartIcon.setAttribute("aria-expanded", "true");
+    }
   }
 
   handleEvents() {
