@@ -173,12 +173,12 @@ export default class ImageGalleryComponent extends HTMLElement {
   handleThumbnailClick(thumbnailList, slider) {
     Array.from(thumbnailList).forEach((thumbnail) => {
       thumbnail.addEventListener("click", (e) => {
-        this.showProductOnThumbnailClick(thumbnailList, thumbnail, slider);
+        this.showActiveProductImage(thumbnailList, thumbnail, slider);
       });
     });
   }
 
-  showProductOnThumbnailClick(thumbnailList, thumbnail, slider) {
+  showActiveProductImage(thumbnailList, thumbnail, slider) {
     this.removeActiveClassFromThumbnails(thumbnailList);
     thumbnail.classList.add("active");
     this.productImageCurrentIndex = Number(thumbnail.dataset.productid) + 1;
@@ -254,23 +254,23 @@ class LightBox {
     );
   }
 
-  selectInitialLightboxThumbnail() {
-    const initialThumbnail = Array.from(this.thumbnailImageButtons).find(
+  selectActiveLightboxThumbnail() {
+    const activeThumbnail = Array.from(this.thumbnailImageButtons).find(
       (thumbnail) =>
         Number(thumbnail.dataset.productid) + 1 ===
         this.imageGallery.productImageCurrentIndex
     );
 
-    this.imageGallery.showProductOnThumbnailClick(
+    this.imageGallery.showActiveProductImage(
       this.thumbnailImageButtons,
-      initialThumbnail,
+      activeThumbnail,
       this.slider
     );
   }
 
   showLightbox() {
     if (window.innerWidth >= this.imageGallery.lightboxEnabledScreenSize) {
-      this.selectInitialLightboxThumbnail();
+      this.selectActiveLightboxThumbnail();
       this.lightbox.classList.add("open");
     }
   }
@@ -293,7 +293,7 @@ class LightBox {
         this.thumbnailImageButtons
       );
       setTimeout(() => {
-        this.markActiveThumbnail();
+        this.selectActiveLightboxThumbnail();
       }, this.imageGallery.transitionDuration);
     });
 
@@ -304,7 +304,7 @@ class LightBox {
         this.thumbnailImageButtons
       );
       setTimeout(() => {
-        this.markActiveThumbnail();
+        this.selectActiveLightboxThumbnail();
       }, this.imageGallery.transitionDuration);
     });
 
@@ -312,16 +312,5 @@ class LightBox {
       this.thumbnailImageButtons,
       this.slider
     );
-  }
-
-  markActiveThumbnail() {
-    Array.from(this.thumbnailImageButtons).forEach((thumbnail) => {
-      if (
-        Number(thumbnail.dataset.productid) + 1 ===
-        this.imageGallery.productImageCurrentIndex
-      ) {
-        thumbnail.classList.add("active");
-      }
-    });
   }
 }
