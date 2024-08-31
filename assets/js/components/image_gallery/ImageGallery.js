@@ -125,11 +125,13 @@ export default class ImageGalleryComponent extends HTMLElement {
       productImageList.setAttribute("style", "cursor: pointer");
       productImageList.addEventListener("click", () => {
         productImageList.setAttribute("aria-expanded", "true");
+        this.productImageOldIndex = this.productImageCurrentIndex;
         this.lightbox.showLightbox();
       });
       productImageList.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           productImageList.setAttribute("aria-expanded", "true");
+          this.productImageOldIndex = this.productImageCurrentIndex;
           this.lightbox.showLightbox();
         }
       });
@@ -298,6 +300,8 @@ class LightBox {
   }
 
   hideLightbox() {
+    console.log(this.imageGallery.productImageOldIndex);
+    console.log(this.imageGallery.productImageCurrentIndex);
     this.imageGallery.setProductImageCurrentIndex(
       this.imageGallery.productImageOldIndex
     );
