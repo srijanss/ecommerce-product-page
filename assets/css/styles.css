@@ -57,11 +57,6 @@ main {
     justify-content: space-around;
     gap: 1rem;
     padding: 90px 1rem 0;
-
-    /* & > * {
-       flex: 1;
-      border: 1px solid red; 
-    } */
   }
   @mixin media-query-large-tablet {
     padding: 90px 1.5rem 0;
@@ -69,7 +64,7 @@ main {
   @mixin media-query-desktop {
     width: 1110px;
     margin: 0 auto;
-    padding-top: 90px 3rem 0;
+    padding: 90px 3rem 0;
     justify-content: space-between;
   }
 }
