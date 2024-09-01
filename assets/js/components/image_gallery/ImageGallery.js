@@ -300,8 +300,6 @@ class LightBox {
   }
 
   hideLightbox() {
-    console.log(this.imageGallery.productImageOldIndex);
-    console.log(this.imageGallery.productImageCurrentIndex);
     this.imageGallery.setProductImageCurrentIndex(
       this.imageGallery.productImageOldIndex
     );
