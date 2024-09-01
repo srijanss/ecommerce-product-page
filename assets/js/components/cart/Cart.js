@@ -38,25 +38,22 @@ export default class CartComponent extends HTMLElement {
   }
 
   showModal() {
-    setTimeout(() => {
-      this.dialog = this.shadow.querySelector("#cart-popup");
-      this.dialog.classList.remove("visually-hidden");
-      this.dialog.setAttribute("aria-hidden", "false");
-      this.dialog.focus();
-      this.focusableElements = this.dialog.querySelectorAll(
-        "a, button, #cart-empty"
-      );
-      Array.from(this.focusableElements).forEach((element) => {
-        element.setAttribute("aria-hidden", "false");
-        element.setAttribute("tabindex", "0");
-      });
-      this.handleEvents();
-    }, 1);
+    this.dialog = this.shadow.querySelector("#cart-popup");
+    this.dialog.classList.remove("visually-hidden");
+    this.dialog.setAttribute("aria-hidden", "false");
+    this.dialog.focus();
+    this.focusableElements = this.dialog.querySelectorAll(
+      "a, button, #cart-empty"
+    );
+    Array.from(this.focusableElements).forEach((element) => {
+      element.setAttribute("aria-hidden", "false");
+      element.setAttribute("tabindex", "0");
+    });
+    this.handleEvents();
     Store.cartStatus = Store.CART_STATUS.OPENED;
   }
 
   hideModal() {
-    // this.shadow.innerHTML = "";
     this.dialog.classList.add("visually-hidden");
     this.dialog.setAttribute("aria-hidden", "true");
     Array.from(this.focusableElements).forEach((element) => {
