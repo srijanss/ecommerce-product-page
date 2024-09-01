@@ -107,6 +107,7 @@
     }
 
     @mixin media-query-desktop {
+      padding: 0 0 var(--nav-padding-bottom-desktop);
       & #cart-wrapper {
         position: relative;
       }
