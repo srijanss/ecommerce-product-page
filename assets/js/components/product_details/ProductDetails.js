@@ -50,6 +50,7 @@ export default class ProductDetailsComponent extends HTMLElement {
               aria-describedby="error-message"
               required
             />
+            <span id="quantity-update-by-btn" class="visually-hidden" aria-live="polite" role="status" aria-atomic="true"></span>
             <button id="decrement-quantity" type="button" aria-label="Decrement quantity">
               <svg width="12" height="4" viewBox="0 0 12 4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-labelledby="minus-svg-icon" role="image" aria-hidden="true" focusable="false">
                 <title id="minus-svg-icon">Minus</title>
@@ -78,6 +79,7 @@ export default class ProductDetailsComponent extends HTMLElement {
           </button>
         </form>
         <p id="error-message" role="alert" aria-live="true" aria-atomic="true"></p>
+        <p id="success-message" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
       </article>
     `;
   }
@@ -130,6 +132,7 @@ export default class ProductDetailsComponent extends HTMLElement {
 
   handleEvents() {
     const form = this.shadow.getElementById("add-to-cart");
+    const successMessageEl = this.shadow.getElementById("success-message");
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const formData = new FormData(form);
@@ -138,6 +141,9 @@ export default class ProductDetailsComponent extends HTMLElement {
       if (validationCheck.valid) {
         const quantity = parseInt(data.quantity);
         Store.addToCart(this.product, quantity);
+        successMessageEl.textContent = `${quantity} item${
+          quantity > 1 ? "s" : ""
+        } added to the cart`;
       } else {
         this.showError(validationCheck.message);
       }
@@ -146,6 +152,10 @@ export default class ProductDetailsComponent extends HTMLElement {
     this.quantityInput.addEventListener("input", () => {
       this.hideError();
     });
+
+    const quantityUpdateByBtn = this.shadow.getElementById(
+      "quantity-update-by-btn"
+    );
 
     const decrementBtn = this.shadow.getElementById("decrement-quantity");
     decrementBtn.addEventListener("focus", () => {
@@ -156,6 +166,7 @@ export default class ProductDetailsComponent extends HTMLElement {
         return;
       }
       this.quantityInput.stepDown();
+      quantityUpdateByBtn.textContent = `Quantity updated to ${this.quantityInput.value}`;
     });
     const incrementBtn = this.shadow.getElementById("increment-quantity");
     incrementBtn.addEventListener("focus", () => {
@@ -166,6 +177,7 @@ export default class ProductDetailsComponent extends HTMLElement {
         return;
       }
       this.quantityInput.stepUp();
+      quantityUpdateByBtn.textContent = `Quantity updated to ${this.quantityInput.value}`;
     });
   }
 }
