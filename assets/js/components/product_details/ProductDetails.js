@@ -78,7 +78,7 @@ export default class ProductDetailsComponent extends HTMLElement {
             Add to cart
           </button>
         </form>
-        <p id="error-message" role="alert" aria-live="true" aria-atomic="true"></p>
+        <p id="error-message" role="alert" aria-live="assertive" aria-atomic="true"></p>
         <p id="success-message" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
       </article>
     `;
