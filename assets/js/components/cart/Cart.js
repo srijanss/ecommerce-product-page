@@ -11,12 +11,12 @@ export default class CartComponent extends HTMLElement {
 
   connectedCallback() {
     this.shadow = this.attachShadow({ mode: "open" });
-    // this.render();
+    this.render();
   }
 
   update(cart) {
     this.cart = cart;
-    // this.render();
+    this.render();
   }
 
   render() {
@@ -24,8 +24,9 @@ export default class CartComponent extends HTMLElement {
       <style>
         ${css}
       </style>
-      <article id="cart-popup" role="dialog" aria-modal="true" aria-labelledby="cart-heading" tabindex="-1">
+      <article id="cart-popup" class="visually-hidden" role="dialog" aria-modal="true" aria-labelledby="cart-heading" tabindex="-1" aria-hidden="true">
         <h2 id="cart-heading">Cart</h2>
+        <span id="cart-update-message" class="visually-hidden" aria-live="polite" role="status" aria-atomic="true"></span>
         <hr aria-hidden="true"/>
         ${
           this.cart.length === 0
@@ -34,30 +35,40 @@ export default class CartComponent extends HTMLElement {
         }
       </article>
     `;
-    setTimeout(() => {
-      this.dialog = this.shadow.querySelector("#cart-popup");
-      this.dialog.focus();
-      this.focusableElements = this.dialog.querySelectorAll("a, button");
-      Array.from(this.focusableElements).forEach((element) => {
-        element.setAttribute("aria-hidden", "false");
-      });
-      this.handleEvents();
-    }, 1);
   }
 
   showModal() {
-    this.render();
+    setTimeout(() => {
+      this.dialog = this.shadow.querySelector("#cart-popup");
+      this.dialog.classList.remove("visually-hidden");
+      this.dialog.setAttribute("aria-hidden", "false");
+      this.dialog.focus();
+      this.focusableElements = this.dialog.querySelectorAll(
+        "a, button, #cart-empty"
+      );
+      Array.from(this.focusableElements).forEach((element) => {
+        element.setAttribute("aria-hidden", "false");
+        element.setAttribute("tabindex", "0");
+      });
+      this.handleEvents();
+    }, 1);
     Store.cartStatus = Store.CART_STATUS.OPENED;
   }
 
   hideModal() {
-    this.shadow.innerHTML = "";
+    // this.shadow.innerHTML = "";
+    this.dialog.classList.add("visually-hidden");
+    this.dialog.setAttribute("aria-hidden", "true");
+    Array.from(this.focusableElements).forEach((element) => {
+      element.setAttribute("aria-hidden", "true");
+      element.setAttribute("tabindex", "-1");
+    });
     Store.cartStatus = Store.CART_STATUS.CLOSED;
   }
 
   renderEmptyCart() {
     return `
-      <section id="cart-empty" aria-labelledby="cart-empty-message" tabindex="0">
+      <section id="cart-empty" aria-labelledby="cart-empty-message">
         <p id="cart-empty-message" >Your cart is empty.</p>
       </section>
     `;
@@ -68,7 +79,7 @@ export default class CartComponent extends HTMLElement {
       <section id="cart-with-items" aria-labelledby="product-name" aria-describedby="product-price quantity subtotal">
         ${this.cart.map((product) => this.renderEachCartItem(product)).join("")}
       </section>
-      <a href="#" id="checkout-btn" >Checkout</a>
+      <a href="#" id="checkout-btn" tabindex="-1">Checkout</a>
     `;
   }
 
@@ -94,7 +105,7 @@ export default class CartComponent extends HTMLElement {
       </p>
       <button id="delete-icon" data-productid="${
         product.id
-      }" aria-label="Delete Item">
+      }" aria-label="Delete Item" tabindex="-1">
         <img src="${DeleteIcon}" alt="Delete cart item" width="14" height="16"/>
       </button>
     `;
@@ -132,6 +143,13 @@ export default class CartComponent extends HTMLElement {
     }
   }
 
+  deleteItemsFromCart(targetEl) {
+    const productId = targetEl.getAttribute("data-productid");
+    Store.removeFromCart(Number(productId));
+    const cartUpdateMessage = this.shadow.querySelector("#cart-update-message");
+    cartUpdateMessage.textContent = "Item removed from the cart";
+  }
+
   handleEvents() {
     const cartPopup = this.shadow.querySelector("#cart-popup");
     cartPopup.addEventListener("keydown", (e) => {
@@ -145,13 +163,11 @@ export default class CartComponent extends HTMLElement {
     const deleteButtons = this.shadow.querySelectorAll("#delete-icon");
     Array.from(deleteButtons).forEach((button) => {
       button.addEventListener("click", (e) => {
-        const productId = e.currentTarget.getAttribute("data-productid");
-        Store.removeFromCart(Number(productId));
+        this.deleteItemsFromCart(e.currentTarget);
       });
       button.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
-          const productId = e.currentTarget.getAttribute("data-productid");
-          Store.removeFromCart(Number(productId));
+          this.deleteItemsFromCart(e.currentTarget);
         }
       });
     });
